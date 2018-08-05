@@ -15,18 +15,29 @@ if (!defined('TV_BOOTSTRAP')) {
 // Tắt hết thông báo lỗi
 error_reporting(0);
 
+/**
+ * @param string $data
+ * @return string
+ */
 function encrypt($data)
 {
     $data = openssl_encrypt($data, 'aes-256-cbc', TV_PRIVATEKEY, 0, TV_PRIVATEKEY);
     return strtr($data, '+/=', '-_,');
 }
 
+/**
+ * @param string $data
+ * @return string
+ */
 function decrypt($data)
 {
     $data = strtr($data, '-_,', '+/=');
     return openssl_decrypt($data, 'aes-256-cbc', TV_PRIVATEKEY, 0, TV_PRIVATEKEY);
 }
 
+/**
+ * @param array $array_data
+ */
 function jsonOutput($array_data)
 {
     Header('Cache-Control: no-cache, must-revalidate');
