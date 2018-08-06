@@ -19,16 +19,6 @@ error_reporting(0);
  * @param string $data
  * @return string
  */
-function encrypt($data)
-{
-    $data = openssl_encrypt($data, 'aes-256-cbc', TV_PRIVATEKEY, 0, TV_PRIVATEKEY);
-    return strtr($data, '+/=', '-_,');
-}
-
-/**
- * @param string $data
- * @return string
- */
 function decrypt($data)
 {
     $data = strtr($data, '-_,', '+/=');
