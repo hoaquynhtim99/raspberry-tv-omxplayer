@@ -77,21 +77,21 @@ if ($request_data['cmd'] == 'play' and !empty($request_data['value'])) {
     // Thao tác kiểm tra trình phát đang chạy hay đang dừng
     exec('pgrep omxplayer', $pids);
     if (empty($pids)) {
-        $response['message'] = "STOPPED";
+        $response['message'] = "stopped";
     } else {
-        $response['message'] = "PLAYING";
+        $response['message'] = "running";
     }
     $response['status'] = 'OK';
-} elseif (in_array($request_data['cmd'], $array_send_cmds) and !empty($request_data['value'])) {
+} elseif (isset($array_send_cmds[$request_data['cmd']])) {
     // Thao tác xử lý lúc phát video
     exec('pgrep omxplayer', $pids);
     if (!empty($pids)) {
         if (is_writable(TV_FIFO)) {
             if ($fifo = fopen(TV_FIFO, 'w')) {
                 stream_set_blocking($fifo, false);
-                fwrite($fifo, $array_send_cmds[$request_data['value']]);
+                fwrite($fifo, $array_send_cmds[$request_data['cmd']]);
                 fclose($fifo);
-                if ($request_data['value'] == 'quit') {
+                if ($request_data['cmd'] == 'quit') {
                     sleep (1);
                     @unlink(TV_FIFO);
                 }
